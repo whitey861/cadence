@@ -107,10 +107,16 @@ Identity: calm institutional confidence, distinct from Warden's Aurora UI. Worki
 - 2026-06-10: Word (.docx) generation first; PDF via worker deferred to Phase 4.
 - 2026-06-10: Talent suite explicitly out of scope until GRC and IP&R phases are complete.
 - 2026-06-10: Working product name Cadence; theme name Ledger. Revisit naming before any external demo.
+- 2026-06-10: Dev database is a hosted Supabase project (ref tineprlidexuqcptasja, ap-southeast-2, AUD ~$10/month) because the dev environment has no Docker for the local CLI stack. Migrations still live in supabase/migrations and apply cleanly to a local stack when Docker is available. Hosted GA Postgres is 17, not 18; revisit when the Beacon deployment is built.
+- 2026-06-10: Audit logging is implemented as a generic write_audit() trigger (security definer) attached per table, with an action of create, update, status_change or delete, plus a block_mutation() trigger making audit_log append-only at the database level independent of RLS and grants.
+- 2026-06-10: Profile data joins use explicit duplicate foreign keys to public.profiles (alongside the auth.users keys) so PostgREST can embed display names; embed hint syntax is profiles!user_id(...).
+- 2026-06-10: shadcn/ui initialised with the base-nova preset (Base UI primitives, not Radix). Base UI components have no asChild prop; use render props or handlers instead.
+- 2026-06-10: Quick-login buttons are gated by build-time NEXT_PUBLIC_ENV checks and verified compiled out of production bundles by grepping .next/static for the test account strings.
 
 ## 7. Progress
 
 - 2026-06-10: Project initiated. CLAUDE.md and this file drafted. No code yet.
+- 2026-06-10: Phase 0 complete. Next.js 15 + TypeScript + Tailwind v4 + shadcn/ui scaffold; six numbered migrations (core tenancy, org structure, append-only audit log with generic triggers, attachments and comments, profile FKs, function hardening) applied to the hosted dev project; RLS on every table via security definer membership helpers; seeded Casuarina Shire Council workspace with five org units, six positions, and the six role test accounts with position assignments; Supabase SSR auth with middleware session refresh; login page with dev-only quick-login buttons; Ledger-themed app shell with left rail nav, workspace switcher, user menu; dashboard, module placeholder pages with teaching empty states, audit log viewer, organisation and members pages. 14 Vitest RLS policy tests and 3 Playwright e2e tests pass; all six roles verified logging in against the live project; production build verified free of test credentials. Supabase security advisors clean apart from the leaked-password-protection auth setting (dashboard toggle, not SQL).
 
 ## 8. Testing notes and bring-back items
 
@@ -119,3 +125,8 @@ Identity: calm institutional confidence, distinct from Warden's Aurora UI. Worki
 - Pilot data idea: load PMHC's published Operational Plan structure from the public website as realistic seed data for the IP&R module demo.
 - Open question: does the delegations register need Crown land and POEO Act provision packs pre-seeded for NSW? Likely yes for demo credibility.
 - Open question: single workspace per council vs sub-workspaces for entities like s 355 committees. Park until a real requirement appears.
+- Phase 0 testing notes: RLS denial paths covered in tests/rls.test.ts for staff and readonly on org_units, positions, memberships, audit_log and profiles; hard deletes verified blocked even for admin; audit_log verified immutable (no insert, update or delete via API). Rerun npm test after every policy change.
+- The hosted dev project means RLS tests hit a live shared database; test artifacts accumulate (RLS-TEST org units, soft-deleted) because hard deletes are denied by design. Periodically reset via a fresh seed if noise builds up.
+- Enable leaked password protection in the Supabase dashboard (Auth settings) before any external-facing deployment; it is a dashboard toggle, not configurable via SQL migration.
+- SUPABASE_SERVICE_ROLE_KEY is not set in .env.local (the MCP connection does not expose it). npm run seed needs it; fetch from the Supabase dashboard if reseeding. The initial seed was applied directly via SQL.
+- Quick-login e2e flow verified with Playwright chromium; this environment needed the ubuntu24.04 fallback browser build.

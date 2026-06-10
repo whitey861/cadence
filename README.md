@@ -21,10 +21,13 @@ npm run seed                 # reference data and test accounts
 ## Commands
 
 - `npm run dev` local app on http://localhost:3000
-- `npm run seed` seed reference data and the six role test accounts
+- `npm run seed` seed base accounts via the auth admin API (hosted)
+- `npm run seed:local` same, against the local stack (.env.test)
 - `npm run gen:types` regenerate Supabase TypeScript types after a migration
-- `npm test` Vitest unit and RLS policy tests
-- `npm run test:e2e` Playwright end-to-end tests
+- `npm test` Vitest unit, RLS policy and lifecycle tests (local stack only)
+- `npm run test:e2e` Playwright end-to-end tests (local stack only; run `supabase db reset` first)
+
+`supabase db reset` replays all migrations and `supabase/seed.sql`, the canonical idempotent demo seed (Casuarina Shire Council, NSW legislative provision pack, two adopted delegation instruments, eight policies). Tests are guarded: they refuse to run against anything other than the local stack, because the hosted project is the shared dev and demo environment.
 
 ## Test accounts
 

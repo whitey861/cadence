@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Source_Serif_4 } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const inter = Inter({
@@ -27,6 +28,7 @@ export default function RootLayout({
     <html lang="en-AU">
       <body className={`${inter.variable} ${sourceSerif.variable} antialiased`}>
         {children}
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );

@@ -1,15 +1,18 @@
 /*
- * RLS policy tests. Run against the project in .env.local using the six
- * seeded role accounts. Verifies both the allow paths and, critically,
- * the denial paths for staff and read_only.
+ * RLS policy tests. Run ONLY against the local Supabase stack (.env.test);
+ * the hosted project is the shared demo environment. Verifies both the
+ * allow paths and, critically, the denial paths for staff and read_only.
  */
 import { describe, it, expect, beforeAll } from "vitest";
 import { config } from "dotenv";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/database.types";
 
-config({ path: ".env.local" });
-config({ path: ".env" });
+config({ path: ".env.test" });
+
+if (!process.env.NEXT_PUBLIC_SUPABASE_URL?.includes("127.0.0.1")) {
+  throw new Error("Tests must run against the local Supabase stack (.env.test)");
+}
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;

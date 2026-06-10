@@ -11,19 +11,28 @@ import {
   History,
   Network,
   Users,
+  ListChecks,
+  CalendarClock,
+  CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_GROUPS = [
   {
     label: "Overview",
-    items: [{ href: "/dashboard", label: "Dashboard", icon: LayoutDashboard }],
+    items: [
+      { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+      { href: "/delegations/mine", label: "My delegations", icon: CheckCircle2 },
+      { href: "/policies/mine", label: "My policies", icon: ListChecks },
+    ],
   },
   {
     label: "Governance",
     items: [
       { href: "/delegations", label: "Delegations", icon: ScrollText },
+      { href: "/delegations/register", label: "Register", icon: ListChecks },
       { href: "/policies", label: "Policies", icon: BookMarked },
+      { href: "/reviews", label: "Reviews", icon: CalendarClock },
     ],
   },
   {
@@ -44,6 +53,20 @@ const NAV_GROUPS = [
   },
 ];
 
+const ALL_HREFS = NAV_GROUPS.flatMap((group) => group.items.map((item) => item.href));
+
+// Longest-prefix wins so /delegations/register lights up Register, not Delegations
+function isActive(pathname: string, href: string): boolean {
+  if (pathname === href) return true;
+  if (!pathname.startsWith(`${href}/`)) return false;
+  return !ALL_HREFS.some(
+    (other) =>
+      other !== href &&
+      other.length > href.length &&
+      (pathname === other || pathname.startsWith(`${other}/`))
+  );
+}
+
 export function SidebarNav() {
   const pathname = usePathname();
 
@@ -56,8 +79,7 @@ export function SidebarNav() {
           </p>
           <ul className="space-y-0.5">
             {group.items.map((item) => {
-              const active =
-                pathname === item.href || pathname.startsWith(`${item.href}/`);
+              const active = isActive(pathname, item.href);
               return (
                 <li key={item.href}>
                   <Link

@@ -7,10 +7,30 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "14.5"
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
   public: {
     Tables: {
@@ -170,6 +190,441 @@ export type Database = {
           },
         ]
       }
+      delegation_acknowledgments: {
+        Row: {
+          acknowledged_at: string
+          delegation_assignment_id: string
+          id: string
+          instrument_version: number
+          position_assignment_id: string
+          user_id: string
+          workspace_id: string
+        }
+        Insert: {
+          acknowledged_at?: string
+          delegation_assignment_id: string
+          id?: string
+          instrument_version: number
+          position_assignment_id: string
+          user_id: string
+          workspace_id: string
+        }
+        Update: {
+          acknowledged_at?: string
+          delegation_assignment_id?: string
+          id?: string
+          instrument_version?: number
+          position_assignment_id?: string
+          user_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delegation_acknowledgments_delegation_assignment_id_fkey"
+            columns: ["delegation_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "delegation_assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delegation_acknowledgments_delegation_assignment_id_fkey"
+            columns: ["delegation_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["delegation_assignment_id"]
+          },
+          {
+            foreignKeyName: "delegation_acknowledgments_delegation_assignment_id_fkey"
+            columns: ["delegation_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["delegation_assignment_id"]
+          },
+          {
+            foreignKeyName: "delegation_acknowledgments_position_assignment_id_fkey"
+            columns: ["position_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "current_position_occupants"
+            referencedColumns: ["position_assignment_id"]
+          },
+          {
+            foreignKeyName: "delegation_acknowledgments_position_assignment_id_fkey"
+            columns: ["position_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["position_assignment_id"]
+          },
+          {
+            foreignKeyName: "delegation_acknowledgments_position_assignment_id_fkey"
+            columns: ["position_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["position_assignment_id"]
+          },
+          {
+            foreignKeyName: "delegation_acknowledgments_position_assignment_id_fkey"
+            columns: ["position_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "position_assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delegation_acknowledgments_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delegation_acks_user_id_profiles_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delegation_assignments: {
+        Row: {
+          created_at: string
+          delegation_id: string
+          effective_from: string
+          effective_to: string | null
+          id: string
+          position_id: string
+          status: Database["public"]["Enums"]["delegation_assignment_status"]
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          delegation_id: string
+          effective_from?: string
+          effective_to?: string | null
+          id?: string
+          position_id: string
+          status?: Database["public"]["Enums"]["delegation_assignment_status"]
+          updated_at?: string
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          delegation_id?: string
+          effective_from?: string
+          effective_to?: string | null
+          id?: string
+          position_id?: string
+          status?: Database["public"]["Enums"]["delegation_assignment_status"]
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delegation_assignments_delegation_id_fkey"
+            columns: ["delegation_id"]
+            isOneToOne: false
+            referencedRelation: "delegations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delegation_assignments_delegation_id_fkey"
+            columns: ["delegation_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["delegation_id"]
+          },
+          {
+            foreignKeyName: "delegation_assignments_delegation_id_fkey"
+            columns: ["delegation_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["delegation_id"]
+          },
+          {
+            foreignKeyName: "delegation_assignments_position_id_fkey"
+            columns: ["position_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["position_id"]
+          },
+          {
+            foreignKeyName: "delegation_assignments_position_id_fkey"
+            columns: ["position_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["position_id"]
+          },
+          {
+            foreignKeyName: "delegation_assignments_position_id_fkey"
+            columns: ["position_id"]
+            isOneToOne: false
+            referencedRelation: "positions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delegation_assignments_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delegation_instruments: {
+        Row: {
+          adopted_date: string | null
+          created_at: string
+          family_id: string
+          id: string
+          instrument_type: Database["public"]["Enums"]["delegation_instrument_type"]
+          resolution_reference: string | null
+          status: Database["public"]["Enums"]["delegation_instrument_status"]
+          supersedes_id: string | null
+          title: string
+          updated_at: string
+          version: number
+          workspace_id: string
+        }
+        Insert: {
+          adopted_date?: string | null
+          created_at?: string
+          family_id?: string
+          id?: string
+          instrument_type: Database["public"]["Enums"]["delegation_instrument_type"]
+          resolution_reference?: string | null
+          status?: Database["public"]["Enums"]["delegation_instrument_status"]
+          supersedes_id?: string | null
+          title: string
+          updated_at?: string
+          version?: number
+          workspace_id: string
+        }
+        Update: {
+          adopted_date?: string | null
+          created_at?: string
+          family_id?: string
+          id?: string
+          instrument_type?: Database["public"]["Enums"]["delegation_instrument_type"]
+          resolution_reference?: string | null
+          status?: Database["public"]["Enums"]["delegation_instrument_status"]
+          supersedes_id?: string | null
+          title?: string
+          updated_at?: string
+          version?: number
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delegation_instruments_supersedes_id_fkey"
+            columns: ["supersedes_id"]
+            isOneToOne: false
+            referencedRelation: "delegation_instruments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delegation_instruments_supersedes_id_fkey"
+            columns: ["supersedes_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["instrument_id"]
+          },
+          {
+            foreignKeyName: "delegation_instruments_supersedes_id_fkey"
+            columns: ["supersedes_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["instrument_id"]
+          },
+          {
+            foreignKeyName: "delegation_instruments_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delegation_provisions: {
+        Row: {
+          created_at: string
+          delegation_id: string
+          id: string
+          provision_id: string
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          delegation_id: string
+          id?: string
+          provision_id: string
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          delegation_id?: string
+          id?: string
+          provision_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delegation_provisions_delegation_id_fkey"
+            columns: ["delegation_id"]
+            isOneToOne: false
+            referencedRelation: "delegations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delegation_provisions_delegation_id_fkey"
+            columns: ["delegation_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["delegation_id"]
+          },
+          {
+            foreignKeyName: "delegation_provisions_delegation_id_fkey"
+            columns: ["delegation_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["delegation_id"]
+          },
+          {
+            foreignKeyName: "delegation_provisions_provision_id_fkey"
+            columns: ["provision_id"]
+            isOneToOne: false
+            referencedRelation: "legislative_provisions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delegation_provisions_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delegations: {
+        Row: {
+          conditions_limitations: string | null
+          created_at: string
+          delegation_instrument_id: string
+          function_description: string | null
+          function_title: string
+          id: string
+          sort_order: number
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          conditions_limitations?: string | null
+          created_at?: string
+          delegation_instrument_id: string
+          function_description?: string | null
+          function_title: string
+          id?: string
+          sort_order?: number
+          updated_at?: string
+          workspace_id: string
+        }
+        Update: {
+          conditions_limitations?: string | null
+          created_at?: string
+          delegation_instrument_id?: string
+          function_description?: string | null
+          function_title?: string
+          id?: string
+          sort_order?: number
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delegations_delegation_instrument_id_fkey"
+            columns: ["delegation_instrument_id"]
+            isOneToOne: false
+            referencedRelation: "delegation_instruments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delegations_delegation_instrument_id_fkey"
+            columns: ["delegation_instrument_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["instrument_id"]
+          },
+          {
+            foreignKeyName: "delegations_delegation_instrument_id_fkey"
+            columns: ["delegation_instrument_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["instrument_id"]
+          },
+          {
+            foreignKeyName: "delegations_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legislative_instruments: {
+        Row: {
+          created_at: string
+          id: string
+          jurisdiction: string
+          name: string
+          source_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          jurisdiction?: string
+          name: string
+          source_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          jurisdiction?: string
+          name?: string
+          source_url?: string | null
+        }
+        Relationships: []
+      }
+      legislative_provisions: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          instrument_id: string
+          reference: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          instrument_id: string
+          reference: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          instrument_id?: string
+          reference?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legislative_provisions_instrument_id_fkey"
+            columns: ["instrument_id"]
+            isOneToOne: false
+            referencedRelation: "legislative_instruments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       memberships: {
         Row: {
           created_at: string
@@ -254,14 +709,296 @@ export type Database = {
             foreignKeyName: "org_units_parent_id_fkey"
             columns: ["parent_id"]
             isOneToOne: false
+            referencedRelation: "delegation_ack_compliance_by_org_unit"
+            referencedColumns: ["org_unit_id"]
+          },
+          {
+            foreignKeyName: "org_units_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["org_unit_id"]
+          },
+          {
+            foreignKeyName: "org_units_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
             referencedRelation: "org_units"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "org_units_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["org_unit_id"]
+          },
+          {
+            foreignKeyName: "org_units_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "policies_register"
+            referencedColumns: ["org_unit_id"]
           },
           {
             foreignKeyName: "org_units_workspace_id_fkey"
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      policies: {
+        Row: {
+          adopted_date: string | null
+          body_storage_path: string | null
+          category: string | null
+          created_at: string
+          family_id: string
+          id: string
+          next_review_date: string | null
+          owner_position_id: string | null
+          policy_number: string | null
+          review_cycle_months: number | null
+          status: Database["public"]["Enums"]["policy_status"]
+          supersedes_id: string | null
+          title: string
+          updated_at: string
+          version: number
+          workspace_id: string
+        }
+        Insert: {
+          adopted_date?: string | null
+          body_storage_path?: string | null
+          category?: string | null
+          created_at?: string
+          family_id?: string
+          id?: string
+          next_review_date?: string | null
+          owner_position_id?: string | null
+          policy_number?: string | null
+          review_cycle_months?: number | null
+          status?: Database["public"]["Enums"]["policy_status"]
+          supersedes_id?: string | null
+          title: string
+          updated_at?: string
+          version?: number
+          workspace_id: string
+        }
+        Update: {
+          adopted_date?: string | null
+          body_storage_path?: string | null
+          category?: string | null
+          created_at?: string
+          family_id?: string
+          id?: string
+          next_review_date?: string | null
+          owner_position_id?: string | null
+          policy_number?: string | null
+          review_cycle_months?: number | null
+          status?: Database["public"]["Enums"]["policy_status"]
+          supersedes_id?: string | null
+          title?: string
+          updated_at?: string
+          version?: number
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "policies_owner_position_id_fkey"
+            columns: ["owner_position_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["position_id"]
+          },
+          {
+            foreignKeyName: "policies_owner_position_id_fkey"
+            columns: ["owner_position_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["position_id"]
+          },
+          {
+            foreignKeyName: "policies_owner_position_id_fkey"
+            columns: ["owner_position_id"]
+            isOneToOne: false
+            referencedRelation: "positions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policies_supersedes_id_fkey"
+            columns: ["supersedes_id"]
+            isOneToOne: false
+            referencedRelation: "pending_policy_acknowledgments"
+            referencedColumns: ["policy_id"]
+          },
+          {
+            foreignKeyName: "policies_supersedes_id_fkey"
+            columns: ["supersedes_id"]
+            isOneToOne: false
+            referencedRelation: "policies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policies_supersedes_id_fkey"
+            columns: ["supersedes_id"]
+            isOneToOne: false
+            referencedRelation: "policies_register"
+            referencedColumns: ["policy_id"]
+          },
+          {
+            foreignKeyName: "policies_supersedes_id_fkey"
+            columns: ["supersedes_id"]
+            isOneToOne: false
+            referencedRelation: "policy_ack_compliance_by_org_unit"
+            referencedColumns: ["policy_id"]
+          },
+          {
+            foreignKeyName: "policies_supersedes_id_fkey"
+            columns: ["supersedes_id"]
+            isOneToOne: false
+            referencedRelation: "policy_ack_targets"
+            referencedColumns: ["policy_id"]
+          },
+          {
+            foreignKeyName: "policies_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      policy_ack_requirements: {
+        Row: {
+          created_at: string
+          id: string
+          policy_id: string
+          scope: Database["public"]["Enums"]["ack_scope"]
+          scope_ref: string | null
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          policy_id: string
+          scope: Database["public"]["Enums"]["ack_scope"]
+          scope_ref?: string | null
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          policy_id?: string
+          scope?: Database["public"]["Enums"]["ack_scope"]
+          scope_ref?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "policy_ack_requirements_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "pending_policy_acknowledgments"
+            referencedColumns: ["policy_id"]
+          },
+          {
+            foreignKeyName: "policy_ack_requirements_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "policies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policy_ack_requirements_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "policies_register"
+            referencedColumns: ["policy_id"]
+          },
+          {
+            foreignKeyName: "policy_ack_requirements_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "policy_ack_compliance_by_org_unit"
+            referencedColumns: ["policy_id"]
+          },
+          {
+            foreignKeyName: "policy_ack_requirements_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "policy_ack_targets"
+            referencedColumns: ["policy_id"]
+          },
+          {
+            foreignKeyName: "policy_ack_requirements_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      policy_acknowledgments: {
+        Row: {
+          acknowledged_at: string
+          id: string
+          policy_version: number
+          requirement_id: string
+          user_id: string
+          workspace_id: string
+        }
+        Insert: {
+          acknowledged_at?: string
+          id?: string
+          policy_version: number
+          requirement_id: string
+          user_id: string
+          workspace_id: string
+        }
+        Update: {
+          acknowledged_at?: string
+          id?: string
+          policy_version?: number
+          requirement_id?: string
+          user_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "policy_acknowledgments_requirement_id_fkey"
+            columns: ["requirement_id"]
+            isOneToOne: false
+            referencedRelation: "pending_policy_acknowledgments"
+            referencedColumns: ["requirement_id"]
+          },
+          {
+            foreignKeyName: "policy_acknowledgments_requirement_id_fkey"
+            columns: ["requirement_id"]
+            isOneToOne: false
+            referencedRelation: "policy_ack_requirements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policy_acknowledgments_requirement_id_fkey"
+            columns: ["requirement_id"]
+            isOneToOne: false
+            referencedRelation: "policy_ack_targets"
+            referencedColumns: ["requirement_id"]
+          },
+          {
+            foreignKeyName: "policy_acknowledgments_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policy_acks_user_id_profiles_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -301,6 +1038,20 @@ export type Database = {
           workspace_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "position_assignments_position_id_fkey"
+            columns: ["position_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["position_id"]
+          },
+          {
+            foreignKeyName: "position_assignments_position_id_fkey"
+            columns: ["position_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["position_id"]
+          },
           {
             foreignKeyName: "position_assignments_position_id_fkey"
             columns: ["position_id"]
@@ -360,8 +1111,36 @@ export type Database = {
             foreignKeyName: "positions_org_unit_id_fkey"
             columns: ["org_unit_id"]
             isOneToOne: false
+            referencedRelation: "delegation_ack_compliance_by_org_unit"
+            referencedColumns: ["org_unit_id"]
+          },
+          {
+            foreignKeyName: "positions_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["org_unit_id"]
+          },
+          {
+            foreignKeyName: "positions_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
             referencedRelation: "org_units"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "positions_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["org_unit_id"]
+          },
+          {
+            foreignKeyName: "positions_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "policies_register"
+            referencedColumns: ["org_unit_id"]
           },
           {
             foreignKeyName: "positions_workspace_id_fkey"
@@ -399,6 +1178,87 @@ export type Database = {
         }
         Relationships: []
       }
+      review_tasks: {
+        Row: {
+          assigned_position_id: string | null
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          due_date: string
+          entity_id: string
+          entity_type: string
+          id: string
+          status: Database["public"]["Enums"]["review_task_status"]
+          title: string
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          assigned_position_id?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          due_date: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          status?: Database["public"]["Enums"]["review_task_status"]
+          title: string
+          updated_at?: string
+          workspace_id: string
+        }
+        Update: {
+          assigned_position_id?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          due_date?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          status?: Database["public"]["Enums"]["review_task_status"]
+          title?: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_tasks_assigned_position_id_fkey"
+            columns: ["assigned_position_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["position_id"]
+          },
+          {
+            foreignKeyName: "review_tasks_assigned_position_id_fkey"
+            columns: ["assigned_position_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["position_id"]
+          },
+          {
+            foreignKeyName: "review_tasks_assigned_position_id_fkey"
+            columns: ["assigned_position_id"]
+            isOneToOne: false
+            referencedRelation: "positions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_tasks_completed_by_fkey"
+            columns: ["completed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_tasks_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workspaces: {
         Row: {
           created_at: string
@@ -431,9 +1291,359 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      current_position_occupants: {
+        Row: {
+          assignment_type: Database["public"]["Enums"]["assignment_type"] | null
+          end_date: string | null
+          position_assignment_id: string | null
+          position_id: string | null
+          start_date: string | null
+          user_id: string | null
+          workspace_id: string | null
+        }
+        Insert: {
+          assignment_type?:
+            | Database["public"]["Enums"]["assignment_type"]
+            | null
+          end_date?: string | null
+          position_assignment_id?: string | null
+          position_id?: string | null
+          start_date?: string | null
+          user_id?: string | null
+          workspace_id?: string | null
+        }
+        Update: {
+          assignment_type?:
+            | Database["public"]["Enums"]["assignment_type"]
+            | null
+          end_date?: string | null
+          position_assignment_id?: string | null
+          position_id?: string | null
+          start_date?: string | null
+          user_id?: string | null
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "position_assignments_position_id_fkey"
+            columns: ["position_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["position_id"]
+          },
+          {
+            foreignKeyName: "position_assignments_position_id_fkey"
+            columns: ["position_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["position_id"]
+          },
+          {
+            foreignKeyName: "position_assignments_position_id_fkey"
+            columns: ["position_id"]
+            isOneToOne: false
+            referencedRelation: "positions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "position_assignments_user_id_profiles_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "position_assignments_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delegation_ack_compliance_by_org_unit: {
+        Row: {
+          acknowledged: number | null
+          org_unit_id: string | null
+          org_unit_name: string | null
+          pending: number | null
+          required: number | null
+          workspace_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delegation_instruments_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delegations_register: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledgment_id: string | null
+          acknowledgment_pending: boolean | null
+          adopted_date: string | null
+          conditions_limitations: string | null
+          delegation_assignment_id: string | null
+          delegation_id: string | null
+          effective_from: string | null
+          effective_to: string | null
+          function_description: string | null
+          function_title: string | null
+          instrument_id: string | null
+          instrument_title: string | null
+          instrument_type:
+            | Database["public"]["Enums"]["delegation_instrument_type"]
+            | null
+          instrument_version: number | null
+          occupant_name: string | null
+          occupant_user_id: string | null
+          org_unit_id: string | null
+          org_unit_name: string | null
+          position_assignment_id: string | null
+          position_code: string | null
+          position_id: string | null
+          position_title: string | null
+          provisions_text: string | null
+          resolution_reference: string | null
+          workspace_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delegation_instruments_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "position_assignments_user_id_profiles_fkey"
+            columns: ["occupant_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pending_delegation_acknowledgments: {
+        Row: {
+          conditions_limitations: string | null
+          delegation_assignment_id: string | null
+          delegation_id: string | null
+          function_title: string | null
+          instrument_id: string | null
+          instrument_title: string | null
+          instrument_version: number | null
+          occupant_name: string | null
+          occupant_user_id: string | null
+          org_unit_id: string | null
+          org_unit_name: string | null
+          position_assignment_id: string | null
+          position_id: string | null
+          position_title: string | null
+          provisions_text: string | null
+          workspace_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delegation_instruments_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "position_assignments_user_id_profiles_fkey"
+            columns: ["occupant_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pending_policy_acknowledgments: {
+        Row: {
+          policy_id: string | null
+          policy_number: string | null
+          policy_title: string | null
+          policy_version: number | null
+          requirement_id: string | null
+          scope: Database["public"]["Enums"]["ack_scope"] | null
+          scope_ref: string | null
+          user_id: string | null
+          user_name: string | null
+          workspace_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_user_id_profiles_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policies_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      policies_register: {
+        Row: {
+          adopted_date: string | null
+          category: string | null
+          next_review_date: string | null
+          org_unit_id: string | null
+          org_unit_name: string | null
+          owner_position_id: string | null
+          owner_position_title: string | null
+          policy_id: string | null
+          policy_number: string | null
+          review_cycle_months: number | null
+          status: Database["public"]["Enums"]["policy_status"] | null
+          title: string | null
+          version: number | null
+          workspace_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "policies_owner_position_id_fkey"
+            columns: ["owner_position_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["position_id"]
+          },
+          {
+            foreignKeyName: "policies_owner_position_id_fkey"
+            columns: ["owner_position_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["position_id"]
+          },
+          {
+            foreignKeyName: "policies_owner_position_id_fkey"
+            columns: ["owner_position_id"]
+            isOneToOne: false
+            referencedRelation: "positions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policies_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      policy_ack_compliance_by_org_unit: {
+        Row: {
+          acknowledged: number | null
+          org_unit_id: string | null
+          org_unit_name: string | null
+          pending: number | null
+          policy_id: string | null
+          policy_number: string | null
+          policy_title: string | null
+          required: number | null
+          workspace_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "policies_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "positions_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "delegation_ack_compliance_by_org_unit"
+            referencedColumns: ["org_unit_id"]
+          },
+          {
+            foreignKeyName: "positions_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "delegations_register"
+            referencedColumns: ["org_unit_id"]
+          },
+          {
+            foreignKeyName: "positions_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "org_units"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "positions_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "pending_delegation_acknowledgments"
+            referencedColumns: ["org_unit_id"]
+          },
+          {
+            foreignKeyName: "positions_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "policies_register"
+            referencedColumns: ["org_unit_id"]
+          },
+        ]
+      }
+      policy_ack_targets: {
+        Row: {
+          policy_id: string | null
+          policy_number: string | null
+          policy_title: string | null
+          policy_version: number | null
+          requirement_id: string | null
+          scope: Database["public"]["Enums"]["ack_scope"] | null
+          scope_ref: string | null
+          user_id: string | null
+          user_name: string | null
+          workspace_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_user_id_profiles_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policies_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
+      adopt_delegation_instrument: {
+        Args: {
+          p_adopted_date: string
+          p_instrument_id: string
+          p_resolution_reference?: string
+        }
+        Returns: undefined
+      }
+      adopt_policy: {
+        Args: { p_adopted_date: string; p_policy_id: string }
+        Returns: undefined
+      }
+      current_sydney_date: { Args: never; Returns: string }
       has_workspace_role: {
         Args: {
           allowed: Database["public"]["Enums"]["membership_role"][]
@@ -443,9 +1653,22 @@ export type Database = {
       }
       is_workspace_member: { Args: { ws: string }; Returns: boolean }
       shares_workspace_with: { Args: { target: string }; Returns: boolean }
+      supersede_delegation_instrument: {
+        Args: { p_instrument_id: string }
+        Returns: string
+      }
+      supersede_policy: { Args: { p_policy_id: string }; Returns: string }
     }
     Enums: {
+      ack_scope: "all_staff" | "org_unit" | "position"
       assignment_type: "substantive" | "acting" | "relieving"
+      delegation_assignment_status: "active" | "revoked"
+      delegation_instrument_status:
+        | "draft"
+        | "adopted"
+        | "superseded"
+        | "archived"
+      delegation_instrument_type: "council_to_gm" | "gm_to_staff"
       membership_role:
         | "admin"
         | "governance_officer"
@@ -455,7 +1678,16 @@ export type Database = {
         | "read_only"
       membership_status: "active" | "invited" | "suspended" | "removed"
       org_unit_type: "directorate" | "division" | "section"
+      policy_status:
+        | "draft"
+        | "consultation"
+        | "adopted"
+        | "under_review"
+        | "superseded"
+        | "rescinded"
+        | "archived"
       position_status: "active" | "inactive" | "abolished"
+      review_task_status: "open" | "complete" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -581,9 +1813,21 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
+      ack_scope: ["all_staff", "org_unit", "position"],
       assignment_type: ["substantive", "acting", "relieving"],
+      delegation_assignment_status: ["active", "revoked"],
+      delegation_instrument_status: [
+        "draft",
+        "adopted",
+        "superseded",
+        "archived",
+      ],
+      delegation_instrument_type: ["council_to_gm", "gm_to_staff"],
       membership_role: [
         "admin",
         "governance_officer",
@@ -594,7 +1838,18 @@ export const Constants = {
       ],
       membership_status: ["active", "invited", "suspended", "removed"],
       org_unit_type: ["directorate", "division", "section"],
+      policy_status: [
+        "draft",
+        "consultation",
+        "adopted",
+        "under_review",
+        "superseded",
+        "rescinded",
+        "archived",
+      ],
       position_status: ["active", "inactive", "abolished"],
+      review_task_status: ["open", "complete", "cancelled"],
     },
   },
 } as const
+

@@ -8,7 +8,8 @@ import { config } from "dotenv";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../src/lib/database.types";
 
-config({ path: ".env.local" });
+// SEED_ENV_FILE=.env.test seeds the local stack; default is the dev project.
+config({ path: process.env.SEED_ENV_FILE ?? ".env.local" });
 config({ path: ".env" });
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

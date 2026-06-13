@@ -1,4 +1,5 @@
 import { LoginForm } from "./login-form";
+import { version } from "../../../package.json";
 
 export default function LoginPage() {
   return (
@@ -13,6 +14,9 @@ export default function LoginPage() {
           </p>
         </div>
         <LoginForm />
+        <p className="mt-8 text-center text-xs text-muted-foreground">
+          Version {version}
+        </p>
       </div>
     </main>
   );
